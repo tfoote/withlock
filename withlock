@@ -128,7 +128,7 @@ def main():
         sys.exit(3)
 
 
-    prev_umask = os.umask(0066)
+    prev_umask = os.umask(0o066)
 
     lock = open(lockfile, 'w')
 
@@ -138,7 +138,7 @@ def main():
             fcntl.lockf(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             got_lock = True
             break
-        except IOError, e:
+        except IOError as e:
             if e.errno in [ errno.EAGAIN, 
                             errno.EACCES, 
                             errno.EWOULDBLOCK, 
@@ -168,7 +168,7 @@ def main():
         try:
             os.stat(lockfile)
             break
-        except OSError, e: 
+        except OSError as e: 
             if e.errno == errno.ENOENT:
                 sys.exit('====== could not stat %s, which we have just locked' \
                             % lockfile)
