@@ -59,6 +59,8 @@ class TestWithlock(unittest.TestCase):
         with TempDirLockfile() as lf:
             cmd = "./withlock %s sleep 5" % lf
             p = subprocess.Popen(cmd.split())
+            # make sure the above has started
+            time.sleep(0.1)
             cmd = "./withlock %s echo hello world" % lf
             retval = subprocess.call(cmd.split())
             p.kill()
@@ -68,16 +70,19 @@ class TestWithlock(unittest.TestCase):
         with TempDirLockfile() as lf:
             cmd = "./withlock %s sleep 5" % lf
             p = subprocess.Popen(cmd.split())
+            # make sure the above has started
+            time.sleep(0.1)
             cmd = "./withlock -q %s echo hello world" % lf
             retval = subprocess.call(cmd.split())
             p.kill()
             self.assertEqual(retval, 0)
 
-
     def test_timeout(self):
         with TempDirLockfile() as lf:
             cmd = "./withlock %s sleep 5" % lf
             p = subprocess.Popen(cmd.split())
+            # make sure the above has started
+            time.sleep(0.1)
             cmd = "./withlock -w 2 %s echo hello world" % lf
             start_time = time.time()
             retval = subprocess.call(cmd.split())
